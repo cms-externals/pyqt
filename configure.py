@@ -1864,9 +1864,13 @@ SOURCES = %s
 """#include <QFile>
 #include <QLibraryInfo>
 #include <QTextStream>
+#include <QCoreApplication>
 
-int main(int, char **)
+int main(int argc, char **argv)
 {
+    // A QCoreApplication is needed to make sure qt.conf is
+    // read and handled correctly.
+    QCoreApplication *app = new QCoreApplication(argc, argv);
     QFile outf("%s");
 
     if (!outf.open(QIODevice::WriteOnly|QIODevice::Truncate|QIODevice::Text))
