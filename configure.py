@@ -23,6 +23,7 @@ import os
 import glob
 import optparse
 import shutil
+import string
 
 import sipconfig
 
@@ -2108,6 +2109,12 @@ int main(int argc, char **argv)
     # Create the executable, first making sure it doesn't exist.
     remove_file(exe_file)
     run_command("%s -f %s%s" % (make, make_file, make_target))
+
+    # Fix Mac OS X qtdirs.app (it must use qt.conf)
+    # Relocate qt.conf to qtdirs.app/Contents/Resources/qt.conf
+    # More details: http://doc.qt.nokia.com/stable/qt-conf.html
+    if string.lower(os.uname()[0]) == "darwin":
+        shutil.copyfile("qt.conf", "qtdirs.app/Contents/Resources/qt.conf")
 
     if not os.access(exe_file, os.X_OK):
         sipconfig.error("Failed to determine the layout of your Qt installation. Try again using the --verbose flag to see more detail about the problem.")
